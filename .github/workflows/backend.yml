@@ -1,0 +1,38 @@
+name: backend-deploy
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install
+        run: npm ci
+
+      - name: Build (skip if none)
+        run: |
+          echo "No build step for JS functions"
+
+      - name: Publish to Azure Functions
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ secrets.AZ_FUNCTIONAPP_NAME }}
+          package: '.'
+          publish-profile: ${{ secrets.AZ_FUNCTIONAPP_PUBLISH_PROFILE }}
+
+      - name: Post-deploy ping (health)
+        if: success()
+        run: |
+          echo "Ping health (optional)"
+          if [ -n "${{ secrets.BACKEND_HEALTH_URL }}" ]; then curl -fsSL "${{ secrets.BACKEND_HEALTH_URL }}" || true; fi
