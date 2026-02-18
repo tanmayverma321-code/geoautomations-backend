@@ -60,4 +60,4 @@ jobs:
           app-name: 'fn-geo-live'
           slot-name: 'Production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3E67BB1ECE8C4535956FECFE283F5154 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_22250897E9EB46B48DC21B7A26220CAE }}
